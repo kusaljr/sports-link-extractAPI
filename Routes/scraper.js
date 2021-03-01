@@ -10,19 +10,19 @@ var link;
 
 router.get("/", (req, res, next) => {
   
- request(LINK , (err , res, html) => {
+ request(LINK , (err ,res, html) => {
      const $ = cheerio.load(html)
    //  console.log(html);
-     const text = $("time dtstart").children("span").attr("title")
-     console.log(text)
+     const text = $(".time").children("span").attr("title")
+    // console.log(text)
      date = text
 
-     const matchTitle = $("play").children("a").attr("title")
-     console.log(matchTitle)
+     const matchTitle = $(".play").children("a").attr("title")
+    // console.log(matchTitle)
      match = matchTitle
 
      const matchLink = $(".play").children("a").attr("href")
-     console.log(matchLink);
+   //  console.log(matchLink);
      link = matchLink
  })
  res.status(200).json({
