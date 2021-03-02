@@ -1,5 +1,7 @@
 const cheerio = require('cheerio');
 const request = require('request');
+const router = require('./scraper');
+
 
 const LINK = "https://sportsbay.org/sports/football";
 request(LINK , (err, res, html) => {
