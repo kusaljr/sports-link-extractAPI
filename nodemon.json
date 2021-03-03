@@ -1,0 +1,7 @@
+{
+    "env": {
+        "ATLAS_MONGO_PW": "firstapi",
+        "PORT": "3000",
+        "JWT_SECRET_KEY": "joeyapitesttoken"
+    }
+}

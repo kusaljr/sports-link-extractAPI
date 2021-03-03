@@ -1,53 +1,55 @@
 const request = require("request");
 const cheerio = require("cheerio");
 const express = require("express")
-const router = express.Router()
+const router = express.Router();
+const Matches = require("../Models/matches")
 
 const LINK = "https://sportsbay.org/sports/football";
-var date;
-var match;
-var link;
-var competitionName;
-var countryName;
+// var date;
+// var match;
+// var link;
+// var competitionName;
+// var countryName;
 
 router.get("/", (req, res, next) => {
   
- request(LINK , (err ,res, html) => {
+ request(LINK , (err ,resp, html) => {
      const $ = cheerio.load(html)
    //  console.log(html);
 
-     const table = $(".filterable")
-        console.log(table)
+    $(".filterable").each((i , el) => {
+     var result = {}
+    
+     result.date = $(el).find(".time").children("span").attr("title")
+     //date = text
+
+     matchTitle = $(el).find(".play").children("a").attr("title")
+     result.match = matchTitle.split(' ').slice(1).join(' ')
 
 
-     const text = $(".time").children("span").attr("title")
-    // console.log(text)
-     date = text
-
-     const matchTitle = $(".play").children("a").attr("title")
-    // console.log(matchTitle)
-     match = matchTitle.split(' ').slice(1).join(' ')
-
-     const matchLink = $(".play").children("a").attr("href")
+     result.matchLink = $(el).find(".play").children("a").attr("href")
    //  console.log(matchLink);
-     link = matchLink
+     //link = matchLink
+     competition = $(el).find('.competition').children('a').attr("title")
+     result.competitionName = competition.split(' ').slice(1).join(' ')
 
-     const competition = $('.competition').children('a').attr("title")
-     competitionName = competition.split(' ').slice(1).join(' ')
+     result.matchLinkcountry = $(el).find('.country').children('a').children('span').attr('title')
 
-     const country = $('.country').children('a').children('span').attr('title')
-     countryName = country
-
-
- })
- res.status(200).json({
-       Message : "Scraping Started",
-       Match_time : date,
-       Match_Title : match,
-       Competition : competitionName,
-       Country : countryName,
-       Link : "https://sportsbay.org" + link
+     Matches.save()
+     .then(
+       res.status(200).json({
+       Message : "Match" + " " + (i+1),
+       Matchtime : result.date,
+       Matchtitle : result.match,
+       Competition : result.competitionName,
+       Country : result.matchLinkcountry,
+       Link : "https://sportsbay.org" + result.matchLink
      })
+     ).catch()
+     
+      
+    })
+ })
 });
 
 module.exports = router;
