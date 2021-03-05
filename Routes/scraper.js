@@ -2,7 +2,6 @@ const request = require("request");
 const cheerio = require("cheerio");
 const express = require("express")
 const router = express.Router();
-const Matches = require("../Models/matches")
 
 const LINK = "https://sportsbay.org/sports/football";
 
@@ -11,34 +10,27 @@ router.get("/", (req, res, next) => {
   
  request(LINK , (err ,resp, html) => {
      const $ = cheerio.load(html)
-   //  console.log(html);
 
-    $(".filterable").children('tbody').each((i , el) => {
-     var result = {}
-    
-     result.date = $(el).find(".time").children("span").attr("title")
-     //date = text
+     var list = []
 
-     matchTitle = $(el).find(".play").children("a").attr("title")
-     result.match = matchTitle.split(' ').slice(1).join(' ')
+     $("tbody> tr").each(function (index, element) {
+      var league = $(element).find('.competition > a').text()
+      var date = $(element).find('.time > span').text()
+      var game = $(element).find('.event > a.summary').text()
+      var link = $(element).find('.event > a').attr('href')
 
+      list.push({
+          Matchtitle: game,
+          Matchtime: date,
+          Competition: league,
+          MatchLink: "https://sportsbay.org"+link
+      })
+    });
 
-     result.matchLink = $(el).find(".play").children("a").attr("href")
-   //  console.log(matchLink);
-     //link = matchLink
-     competition = $(el).find('.competition').children('a').attr("title")
-     result.competitionName = competition.split(' ').slice(1).join(' ')
-
-     result.matchLinkcountry = $(el).find('.country').children('a').children('span').attr('title')
-       res.status(200).json({
-       Message : "Match" + " " + (i+1),
-       Matchtime : result.date,
-       Matchtitle : result.match,
-       Competition : result.competitionName,
-       Country : result.matchLinkcountry,
-       Link : "https://sportsbay.org" + result.matchLink
-     }) 
+    res.status(200).json({
+      list
     })
+
  })
 });
 
