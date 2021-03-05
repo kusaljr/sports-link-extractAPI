@@ -17,7 +17,7 @@ router.get("/", (req, res, next) => {
       var league = $(element).find('.competition > a').text()
       var date = $(element).find('.time > span').text()
       var game = $(element).find('.event > a.summary').text()
-      var link = $(element).find('.event > a').attr('href')
+      var link = $(element).find('.event > a.summary').attr('href')
 
       list.push({
           Matchtitle: game,
@@ -26,11 +26,10 @@ router.get("/", (req, res, next) => {
           MatchLink: "https://sportsbay.org"+link
       })
     });
-
+    list.shift()
     res.status(200).json({
       list
     })
-
  })
 });
 
