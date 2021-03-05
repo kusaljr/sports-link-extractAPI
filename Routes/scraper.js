@@ -5,11 +5,7 @@ const router = express.Router();
 const Matches = require("../Models/matches")
 
 const LINK = "https://sportsbay.org/sports/football";
-// var date;
-// var match;
-// var link;
-// var competitionName;
-// var countryName;
+
 
 router.get("/", (req, res, next) => {
   
@@ -17,7 +13,7 @@ router.get("/", (req, res, next) => {
      const $ = cheerio.load(html)
    //  console.log(html);
 
-    $(".filterable").each((i , el) => {
+    $(".filterable").children('tbody').each((i , el) => {
      var result = {}
     
      result.date = $(el).find(".time").children("span").attr("title")
@@ -34,9 +30,6 @@ router.get("/", (req, res, next) => {
      result.competitionName = competition.split(' ').slice(1).join(' ')
 
      result.matchLinkcountry = $(el).find('.country').children('a').children('span').attr('title')
-
-     Matches.save()
-     .then(
        res.status(200).json({
        Message : "Match" + " " + (i+1),
        Matchtime : result.date,
@@ -44,10 +37,7 @@ router.get("/", (req, res, next) => {
        Competition : result.competitionName,
        Country : result.matchLinkcountry,
        Link : "https://sportsbay.org" + result.matchLink
-     })
-     ).catch()
-     
-      
+     }) 
     })
  })
 });

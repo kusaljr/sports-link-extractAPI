@@ -8,13 +8,13 @@ const mongoose = require("mongoose")
 
 
 
-mongoose.connect("mongodb+srv://firstapi:" 
-  + process.env.ATLAS_MONGO_PW + 
-  "@firstapi.ypomx.mongodb.net/matches?retryWrites=true&w=majority" , 
-{
-    useNewUrlParser: true,
-    useUnifiedTopology : true,
-})
+// mongoose.connect("mongodb+srv://firstapi:" 
+//   + process.env.ATLAS_MONGO_PW + 
+//   "@firstapi.ypomx.mongodb.net/matches?retryWrites=true&w=majority" , 
+// {
+//     useNewUrlParser: true,
+//     useUnifiedTopology : true,
+// })
 
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
